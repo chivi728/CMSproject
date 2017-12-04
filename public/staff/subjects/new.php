@@ -2,12 +2,6 @@
 
 require_once('../../../private/initialize.php');
 
-require_login();
-
-$subject_set = find_all_subjects();
-$subject_count = mysqli_num_rows($subject_set) + 1;
-mysqli_free_result($subject_set);
-
 if(is_post_request()) {
 
   $subject = [];
@@ -18,7 +12,6 @@ if(is_post_request()) {
   $result = insert_subject($subject);
   if($result === true) {
     $new_id = mysqli_insert_id($db);
-    $_SESSION['message'] = 'The subject was created successfully.';
     redirect_to(url_for('/staff/subjects/show.php?id=' . $new_id));
   } else {
     $errors = $result;
@@ -31,6 +24,10 @@ if(is_post_request()) {
   $subject["position"] = $subject_count;
   $subject["visible"] = '';
 }
+
+$subject_set = find_all_subjects();
+$subject_count = mysqli_num_rows($subject_set) + 1;
+mysqli_free_result($subject_set);
 
 ?>
 
@@ -49,7 +46,7 @@ if(is_post_request()) {
     <form action="<?php echo url_for('/staff/subjects/new.php'); ?>" method="post">
       <dl>
         <dt>Menu Name</dt>
-        <dd><input type="text" name="menu_name" value="<?php echo h($subject['menu_name']); ?>" /></dd>
+        <dd><input type="text" name="menu_name" value="<?php echo $subject['menu_name']; ?>" /></dd>
       </dl>
       <dl>
         <dt>Position</dt>
@@ -71,7 +68,7 @@ if(is_post_request()) {
         <dt>Visible</dt>
         <dd>
           <input type="hidden" name="visible" value="0" />
-          <input type="checkbox" name="visible" value="1"<?php if($subject['visible'] == 1) { echo " checked"; } ?> />
+          <input type="checkbox" name="visible" value="1"<?php echo if($subject['visible'] == 1) { echo " checked"}; ?> />
         </dd>
       </dl>
       <div id="operations">

@@ -1,14 +1,10 @@
 <?php require_once('../../../private/initialize.php'); ?>
 
 <?php
-
-require_login();
-
 // $id = isset($_GET['id']) ? $_GET['id'] : '1';
 $id = $_GET['id'] ?? '1'; // PHP > 7.0
 
 $page = find_page_by_id($id);
-$subject = find_subject_by_id($page['subject_id']);
 
 ?>
 
@@ -17,17 +13,14 @@ $subject = find_subject_by_id($page['subject_id']);
 
 <div id="content">
 
-  <a class="back-link" href="<?php echo url_for('/staff/subjects/show.php?id=' . h(u($subject['id']))); ?>">&laquo; Back to Subject Page</a>
+  <a class="back-link" href="<?php echo url_for('/staff/pages/index.php'); ?>">&laquo; Back to List</a>
 
   <div class="page show">
 
     <h1>Page: <?php echo h($page['menu_name']); ?></h1>
 
-    <div class="actions">
-      <a class="action" href="<?php echo url_for('/index.php?id=' . h(u($page['id'])) . '&preview=true'); ?>" target="_blank">Preview</a>
-    </div>
-
     <div class="attributes">
+      <?php $subject = find_subject_by_id($page['subject_id']); ?>
       <dl>
         <dt>Subject</dt>
         <dd><?php echo h($subject['menu_name']); ?></dd>
